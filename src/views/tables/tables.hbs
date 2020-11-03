@@ -1,0 +1,177 @@
+<script defer src="/js/editTables.js"></script>
+
+
+<link href="css/scroll.css" rel="stylesheet">
+<div class="container pt-3">
+    <div class="card-deck mb-3 text-center">
+
+        <div class="scrollbar scrollbar-primary" style="height: 600px; width: 320px;">
+            <h6>Свободны:</h6>
+            {{#each tables}}
+                {{#ifEq status 'free'}}
+        <div  class="card mb-4 shadow-sm " style="border: 1px solid #407fe9;">
+
+            <div class="card-header " style="background-color: green">
+                <h4 class="my-0 font-weight-normal">№{{number}}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{places}} <small class="text-muted">/ мест/а</small></h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    {{#each armed}}
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary" style="margin-top: 0rem" data-toggle="modal" data-target="#block{{_id}}">{{time}} | {{date}}</button>
+                    {{/each}}
+                </ul>
+                <div class="row" style="display: flex;   align-items: center;    justify-content: space-around;">
+                <button type="button" id="{{number}}" name="busy" class="col-md-5 btn btn-lg btn-block btn-outline-primary">Занят</button>
+                <button type="button" class="col-md-5 btn btn-lg btn-block btn-outline-primary" style="margin-top: 0rem" data-toggle="modal" data-target="#exampleModal{{number}}">Бронь</button>
+                </div>
+            </div>
+
+        </div>{{/ifEq}}{{/each}}
+        </div>
+        <div  class="scrollbar scrollbar-primary" style="height: 600px; width: 320px;">
+            <h6>Заняты:</h6>
+            {{#each tables}}
+                {{#ifEq status 'busy'}}
+                <div class="card mb-4 shadow-sm " style="border: 1px solid #407fe9;">
+
+                    <div class="card-header " style="background-color: red">
+                        <h4 class="my-0 font-weight-normal">№{{number}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{places}} <small class="text-muted">/ мест/а</small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            {{#each armed}}
+                                <button type="button" class="btn btn-lg btn-block btn-outline-primary" style="margin-top: 0rem" data-toggle="modal" data-target="#block{{_id}}">{{time}} | {{date}}</button>
+                            {{/each}}
+                        </ul>
+                        <button type="button" id="{{number}}" name="free" class="btn btn-lg btn-block btn-outline-primary">Освободить</button>
+                    </div>
+
+                </div>{{/ifEq}}{{/each}}
+        </div>
+        <div class="scrollbar scrollbar-primary" style="height: 600px; width: 320px;">
+            <h6>Бронь:</h6>
+            {{#each tables}}
+                {{#ifEq status 'block'}}
+                <div class="card mb-4 shadow-sm " style="border: 1px solid #407fe9;">
+
+                    <div class="card-header " style="background-color: #4184f2">
+                        <h4 class="my-0 font-weight-normal">№{{number}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{places}} <small class="text-muted">/ мест/а</small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            {{#each armed}}
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" style="margin-top: 0rem" data-toggle="modal" data-target="#block{{_id}}">{{time}} | {{date}}</button>
+                            {{/each}}
+                            </ul>
+                        <div class="row" style="display: flex;   align-items: center;    justify-content: space-around;">
+                            <button type="button" id="{{number}}" name="busy" class="col-md-5 btn btn-lg btn-block btn-outline-primary">Занят</button>
+                            <button type="button" class="col-md-5 btn btn-lg btn-block btn-outline-primary" style="margin-top: 0rem" data-toggle="modal" data-target="#exampleModal{{number}}">Бронь</button>
+                        </div>
+                    </div>
+
+                </div>{{/ifEq}}{{/each}}
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+{{#each tables}}
+<div class="modal fade" id="exampleModal{{number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Бронирование</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <form method="post" action="/tables">
+            <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">ФИО</label>
+                            <input type="text" class="form-control" id="name" name="username" placeholder="Введите логин">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="mob">Телефон</label>
+                            <input type="tel" class="form-control" id="mob" name="numberPhone" placeholder="Введите номер телефона">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Заметки</label>
+                        <textarea type="textarea" class="form-control" id="content" name="contentText"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mob">Дата</label>
+                        <input type="datetime-local" class="form-control" id="mob" name="dateOut" placeholder="Введите номер телефона">
+                    </div>
+                <div class="form-group">
+                   <input type="hidden" class="form-control" id="mob" name="tableOut" value={{number}} placeholder="Введите номер телефона">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit"   class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{#each tables}}
+    {{#each armed}}
+    <div class="modal fade" id="block{{_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Бронирование</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="content text-center">
+                            <h5>Имя:{{name}} Тел:{{phone}}</h5>
+                            <h5>Время:{{time}} Дата:{{date}}</h5>
+                            <h6>{{content}}</h6>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="{{_id}}"  name="deleteKey" class="btn btn-primary">Удалить бронь</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/deleteBlock.js"></script>
+    {{/each}}
+{{/each}}
